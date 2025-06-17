@@ -7,12 +7,13 @@ import Signup from "./components/Signup";
 import Logout from "./components/Logout";
 // {user && <Logout />}
 
-
 function App() {
   const [items, setItems] = useState(roadmapItemsData);
   const [filterStatus, setFilterStatus] = useState("All");
   const [sortBy, setSortBy] = useState("upvotes");
-  const { user } = useUser();
+  // const { user } = useUser();
+  const { user, logout } = useUser();
+
 
   const handleUpvote = (id) => {
     const updated = items.map((item) =>
@@ -71,11 +72,18 @@ function App() {
           <div className="space-y-4">
             <Login />
             <Signup />
-            {user && <Logout />}
           </div>
         ) : (
           <div>
-            <h2 className="text-xl mb-4">Welcome, {user.email}</h2>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl text-gray-800">Welcome, {user.email}</h2>
+              <button
+                onClick={logout}
+                className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
+              >
+                Logout
+              </button>
+            </div>
             {sortedItems.map((item) => (
               <RoadmapItem key={item.id} item={item} onUpvote={handleUpvote} />
             ))}

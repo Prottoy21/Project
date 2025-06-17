@@ -4,58 +4,35 @@ import { useUser } from "../context/UserContext";
 function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
-  const { login } = useUser(); // simulate account creation
+  const { signup } = useUser();
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    if (!email.trim() || !password.trim()) {
-      setError("Email and password are required.");
-      return;
-    }
-
-    setError("");
-    setSuccess(true);
-    login(email); // simulate signup
+    await signup(email, password);
+    setEmail("");
+    setPassword("");
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-md max-w-sm mx-auto border border-gray-200">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">Sign Up</h2>
-
-      {success && <p className="text-green-600 mb-2 text-center">✅ Account created!</p>}
-
-      <form onSubmit={handleSignup} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">Email Address</label>
-          <input
-            type="email"
-            placeholder="you@example.com"
-            className="w-full p-2 border rounded-md"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">Password</label>
-          <input
-            type="password"
-            placeholder="Create a password"
-            className="w-full p-2 border rounded-md"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-
-        <button
-          type="submit"
-          className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
-        >
-          Create Account
+    <div className="bg-white p-6 rounded-xl shadow-md max-w-sm mx-auto border border-gray-200 mt-6">
+      <h2 className="text-2xl font-bold mb-4 text-gray-700">Signup</h2>
+      <form onSubmit={handleSignup}>
+        <input
+          type="email"
+          placeholder="Email"
+          className="w-full p-2 border rounded mb-3"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          className="w-full p-2 border rounded mb-4"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit" className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">
+          Signup
         </button>
       </form>
     </div>
