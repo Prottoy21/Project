@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import roadmapItemsData from './data/roadmapItems';
 import RoadmapItem from './components/RoadmapItem';
 import { useUser } from './context/UserContext';
@@ -7,6 +7,8 @@ import Signup from './components/Signup';
 
 function App() {
   const [items, setItems] = useState(roadmapItemsData);
+  const [filterStatus, setFilterStatus] = useState("All");
+  const [sortBy, setSortBy] = useState("upvotes");
   const { user } = useUser();
 
   const handleUpvote = (id) => {
@@ -16,11 +18,49 @@ function App() {
     setItems(updated);
   };
 
+  // Filter items based on selected status
+  const filteredItems = items.filter(item => 
+    filterStatus === "All" || item.status === filterStatus
+  );
+
+  // Sort items based on selected criteria
+  const sortedItems = filteredItems.sort((a, b) => {
+    if (sortBy === "upvotes") {
+      return b.upvotes - a.upvotes;  // Sort by upvotes descending
+    } else if (sortBy === "status") {
+      return a.status.localeCompare(b.status);  // Sort by status alphabetically
+    }
+    return 0;
+  });
+
   return (
     <div className="max-w-3xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">🚀 Product Roadmap</h1>
 
-      {/* Show Login or Signup based on user status */}
+      {/* Filter and Sort */}
+      <div className="flex gap-4 mb-4">
+        <select
+          onChange={(e) => setFilterStatus(e.target.value)}
+          value={filterStatus}
+          className="p-2 border rounded"
+        >
+          <option value="All">All Statuses</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Completed">Completed</option>
+          <option value="Planned">Planned</option>
+        </select>
+
+        <select
+          onChange={(e) => setSortBy(e.target.value)}
+          value={sortBy}
+          className="p-2 border rounded"
+        >
+          <option value="upvotes">Sort by Upvotes</option>
+          <option value="status">Sort by Status</option>
+        </select>
+      </div>
+
+      {/* Show Login/Signup if no user, else show roadmap */}
       {!user ? (
         <div className="space-y-4">
           <Login />
@@ -29,7 +69,7 @@ function App() {
       ) : (
         <div>
           <h2 className="text-xl mb-4">Welcome, {user.email}</h2>
-          {items.map(item => (
+          {sortedItems.map(item => (
             <RoadmapItem key={item.id} item={item} onUpvote={handleUpvote} />
           ))}
         </div>
