@@ -5,13 +5,13 @@ import { useUser } from "./context/UserContext";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Logout from "./components/Logout";
-// {user && <Logout />}
+
 
 function App() {
   const [items, setItems] = useState(roadmapItemsData);
   const [filterStatus, setFilterStatus] = useState("All");
   const [sortBy, setSortBy] = useState("upvotes");
-  // const { user } = useUser();
+
   const { user, logout } = useUser();
 
 
@@ -22,17 +22,17 @@ function App() {
     setItems(updated);
   };
 
-  // Filter items based on selected status
+
   const filteredItems = items.filter(
     (item) => filterStatus === "All" || item.status === filterStatus
   );
 
-  // Sort items based on selected criteria
+
   const sortedItems = filteredItems.sort((a, b) => {
     if (sortBy === "upvotes") {
-      return b.upvotes - a.upvotes; // Sort by upvotes descending
+      return b.upvotes - a.upvotes; 
     } else if (sortBy === "status") {
-      return a.status.localeCompare(b.status); // Sort by status alphabetically
+      return a.status.localeCompare(b.status); 
     }
     return 0;
   });
@@ -44,7 +44,7 @@ function App() {
           🚀Roadmap Application
         </h1>
 
-        {/* Filter and Sort */}
+        
         <div className="flex flex-wrap items-center justify-center gap-4 mb-6">
           <select
             onChange={(e) => setFilterStatus(e.target.value)}
@@ -67,7 +67,7 @@ function App() {
           </select>
         </div>
 
-        {/* Show Login/Signup if no user, else show roadmap */}
+        
         {!user ? (
           <div className="space-y-4">
             <Login />
